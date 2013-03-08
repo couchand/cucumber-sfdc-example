@@ -1,0 +1,133 @@
+Before do
+	@objects   = Hash.new
+	@fields    = Hash.new
+	@buttons   = Hash.new
+	@errors    = Hash.new
+	@test_data = Array.new
+end
+
+After do
+	@test_data.each do|item|
+	   When "I delete the object with id #{item}"
+	    And "I wait for the element with class bodyDiv to be visible"
+	end
+end
+
+Given /^an object named "([^"]+)" with code "([^"]{3})"$/ do |object_name, object_code|
+	@objects[object_name] = object_code
+end
+
+Given /^a field named "([^"]+)" with id "([^"]+)"$/ do |field_name, field_id|
+	@fields[field_name] = field_id
+end
+
+Given /^a button named "([^"]+)" with code "([^"]+)"$/ do |button_name,button_code|
+	@buttons[button_name] = button_code
+end
+
+Given /^an error named "([^"]+)" with message "([^"]+)"$/ do |error_name,error_message|
+	@errors[error_name] = error_message
+end
+
+Given /^an admin with username \"([^"]+)\" and password \"([^"]+)\"$/ do |username, password|
+	@admin_user = username
+	@admin_pass = password
+end
+
+Given /^a regular user with username \"([^"]+)\" and password \"([^"]+)\"$/ do |username, password|
+	@user_user = username
+	@user_pass = password
+end
+
+Before do
+  Given "a field named \"name\" with id \"Name\""
+    And "a button named \"edit\" with code \"edit\""
+    And "a button named \"new\" with code \"new\""
+    And "a button named \"save\" with code \"save\""
+    And "a button named \"delete\" with code \"del\""
+end
+
+Given /^the SFDC instance at "([^"]+)"$/ do |url|
+	@base_url = url
+end
+
+Given /^I am on the detail page for (.+)$/ do |id|
+   When "I navigate to https://#{@base_url}/#{id}"
+    And "I wait for the element with class bodyDiv to be visible"
+end
+
+When /^I type "(.*)" into ([^"]+)$/ do |input,field|
+   When "I type \"#{input}\" for #{@fields[field]}"
+end
+
+When /^I click the (.+) button$/ do |button_name|
+   When "I click the button with name #{@buttons[button_name]}"
+end
+
+Then /^I will be logged in as an admin$/ do
+end
+
+Then /^I will be logged in as a regular user$/ do
+end
+
+Then /^I will have created a new object$/ do
+	@test_data.push(/^.+\/([^\/]+)/.match($driver.current_url)[1])
+end
+
+Then /^I should see an? (.+) error$/ do |error_type|
+   Then "the page should contain the words \"#{@errors[error_type]}\""
+end
+
+Then /^I should not see an error$/ do
+  Given "I wait for the element with class bodyDiv to be visible"
+   Then "the page should not contain the words \"Error\""
+end
+
+When /^I click save$/ do
+   When "I click the save button"
+end
+
+When /^I click delete$/ do
+   When "I click the delete button"
+end
+
+When /^I click on the ([^"]+) tab$/ do |object_name|
+   When "I navigate to https://#{@base_url}/#{@objects[object_name]}/o"
+    And "I wait for the element with class bodyDiv to be visible"
+end
+
+When /^I delete the object with id (.+)$/ do |id|
+  Given "I am on the detail page for #{id}"
+   When "I click delete"
+    And "I accept"
+end
+
+Given /^I am logged in as an admin$/ do
+  Given "I am on the page #{@base_url}"
+    And "I type \"#{@admin_user}\" for username"
+    And "I type \"#{@admin_pass}\" for password"
+    And "I click submit"
+    And "I wait for the element with class bodyDiv to be visible"
+   Then "I will be logged in as an admin"
+end
+
+Given /^I am logged in as a regular user$/ do
+  Given "I am on the page #{@base_url}"
+    And "I type \"#{@user_user}\" for username"
+    And "I type \"#{@user_pass}\" for password"
+    And "I click submit"
+    And "I wait for the element with class bodyDiv to be visible"
+   Then "I will be logged in as a regular user"
+end
+
+Given /^a (\w+) named (\w+)$/ do |class_name,object_name|
+  Given "I am logged in as an admin"
+   When "I click on the #{class_name} tab"
+    And "I type \"#{object_name}\" for sbstr"
+    And "I click submit"
+
+    if (When "the page contains the words \"There are no matching\"") then
+	    And "I create a new #{class_name} named \"#{object_name}\""
+    end
+end
+

@@ -1,0 +1,21 @@
+cucumber-sfdc-example
+=====================
+
+An example of the use of Cucumber and Selenium to write Salesforce.com acceptance tests.
+
+ * getting started
+ * more information
+
+getting started
+---------------
+
+Run the features:
+
+```bash
+cucumber
+```
+
+more information
+----------------
+
+Aboard, about, above, after, along, among.
