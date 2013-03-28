@@ -1,13 +1,8 @@
 require 'rubygems'
-require 'headless'
 require 'selenium-webdriver'
 
-headless = Headless.new
-headless.start
+$driver = Selenium::WebDriver.for :remote, :url => 'http://couchand:ba998d45-e4c9-496b-add9-b4670ceed1a1@ondemand.saucelabs.com:80/wd/hub'
 
-$driver = Selenium::WebDriver.for :firefox
 at_exit do
   $driver.close
-  headless.destroy
 end
-
