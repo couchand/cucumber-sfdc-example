@@ -3,7 +3,7 @@
 ###################################################################################################
 
 Before do
-   step "the SFDC instance at \"na7.salesforce.com\""  
+   step "the SFDC instance at \"na15.salesforce.com\""
    step "an admin with username \"acouch@cucumber.com\" and password \"testpass0\""
    step "a regular user with username \"ben.chel@cucumber.com\" and password \"testpass1\""
    step "an object named \"product\" with code \"a00\""
