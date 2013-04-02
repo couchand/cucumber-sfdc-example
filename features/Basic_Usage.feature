@@ -3,7 +3,7 @@ Feature: Basic usage of the Salesforce UI
   Jenkins should run through the UI
 
   Scenario: User creates a new Lead
-    Given a new Lead
+   Given I'm on the new Lead page
     When I enter the Last Name "Vukovitch"
      And I enter the Company "Bluewolf"
      And I click Save
