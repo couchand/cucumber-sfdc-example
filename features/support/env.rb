@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'selenium-webdriver'
 
-$capabilities = Selenium::WebDriver::Capabilities.new({
+$capabilities = Selenium::WebDriver::Remote::Capabilities.new({
     :browser_name => ENV["SELENIUM_BROWSER"],
     :version      => ENV["SELENIUM_VERSION"],
     :platform     => ENV["SELENIUM_PLATFORM"],
